@@ -70,10 +70,3 @@ Open `docs/analysis.html` in a browser for the written algorithm analysis requir
 
 Open `lean/Assignment1.lean` in VS Code with the Lean 4 extension, or add it to a Lean project. Each theorem is named after the corresponding textbook example and has a tactic proof that Lean verifies.
 
-## Submission checklist
-
-1. Replace this README's group details if your instructor requires them.
-2. Run the program on a small formula during the demo.
-3. Add at least one selected SAT 2002 `.cnf` input only if your group is allowed to distribute it.
-4. Generate Doxygen HTML locally if `doxygen` is installed.
-5. Zip the project as `id1_LOGIC_A1.zip`, using the submitting member's BITS ID as `id1`.
