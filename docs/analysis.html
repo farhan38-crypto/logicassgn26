@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logic Assignment 1 - Design and Analysis</title>
+  <style>
+    :root { --ink:#1d2433; --muted:#536177; --paper:#fffdf8; --accent:#126782; --line:#d8e0e8; --code:#102a43; }
+    * { box-sizing:border-box; } body { margin:0; background:#edf3f7; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:960px; margin:36px auto; padding:48px; background:var(--paper); box-shadow:0 12px 35px #26384b24; border-radius:14px; }
+    h1,h2 { line-height:1.2; } h1 { font-size:2.35rem; margin:0 0 8px; color:#0b3954; } h2 { margin-top:38px; color:var(--accent); border-bottom:2px solid #b8dce8; padding-bottom:7px; }
+    .subtitle { color:var(--muted); margin-top:0; } code { background:#e7f0f5; padding:2px 5px; border-radius:4px; color:var(--code); } table { width:100%; border-collapse:collapse; margin:18px 0; } th,td { padding:11px; text-align:left; border:1px solid var(--line); vertical-align:top; } th { background:#dcecf2; } .callout { padding:16px 19px; border-left:5px solid var(--accent); background:#edf8fb; } footer { margin-top:40px; color:var(--muted); font-size:.9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Propositional-Logic Parse Tree</h1>
+  <p class="subtitle">CS F214 - Assignment 1, Part A: design, results, and complexity analysis</p>
+  <p class="callout">The program accepts a fully parenthesized formula with <code>~</code>, <code>+</code>, <code>*</code>, and <code>&gt;</code>, builds a rooted parse tree, and uses that one representation for every required operation.</p>
+  <h2>Representation and workflow</h2>
+  <p>Each node stores a token and owning pointers to its children. Binary connectives have two children; negation has only a left child. The input parser constructs the tree by recursive descent. Prefix notation is then generated with a preorder visit, and the prefix reader reconstructs the same tree as required in Tasks 1 and 2.</p>
+  <p>The program also accepts a DIMACS CNF file through <code>--cnf</code>. It maps literal <code>k</code> to <code>xk</code>, negative literal <code>-k</code> to <code>(~xk)</code>, clause disjunctions to <code>+</code>, and the conjunction of clauses to <code>*</code>.</p>
+  <h2>Task coverage</h2>
+  <table><thead><tr><th>Task</th><th>Implementation</th><th>Observed output</th></tr></thead><tbody>
+  <tr><td>1-2</td><td><code>infix_to_prefix</code>, <code>prefix_to_tree</code></td><td>Prefix tokens and the root of the reconstructed tree.</td></tr>
+  <tr><td>3</td><td>Recursive and stack-based inorder, preorder, postorder traversals.</td><td>Both variants agree for each traversal.</td></tr>
+  <tr><td>4</td><td>Recursive maximum-depth calculation and iterative DFS carrying depth.</td><td>Both variants return the same node-height.</td></tr>
+  <tr><td>5</td><td>Iterative postorder evaluation and exhaustive valuation enumeration.</td><td>A complete truth table with <code>T</code>/<code>F</code> values.</td></tr>
+  </tbody></table>
+  <h2>Complexity and memory use</h2>
+  <table><thead><tr><th>Operation</th><th>Time</th><th>Auxiliary memory</th><th>Reason</th></tr></thead><tbody>
+  <tr><td>Parse / prefix conversion / any traversal</td><td>O(n)</td><td>O(h) recursive, O(n) iterative worst case</td><td>Each parse-tree node is visited once; h is tree height.</td></tr>
+  <tr><td>Height</td><td>O(n)</td><td>O(h) recursive, O(n) iterative worst case</td><td>Every node contributes once to the maximum-depth search.</td></tr>
+  <tr><td>One evaluation</td><td>O(n)</td><td>O(n)</td><td>Bottom-up postorder stores one Boolean result per node.</td></tr>
+  <tr><td>Truth table with v atoms</td><td>O(2<sup>v</sup>n)</td><td>O(n + v)</td><td>Every one of the 2<sup>v</sup> valuations is evaluated across n nodes.</td></tr>
+  </tbody></table>
+  <h2>Example run</h2>
+  <p>For <code>((p*q)&gt;r)</code>, the prefix form is <code>&gt; * p q r</code>. The tree height is 3. Its truth table contains 8 rows because it has three distinct atoms. The executable prints the recursive and iterative outputs side by side, making manual verification straightforward.</p>
+  <h2>Limits and test guidance</h2>
+  <p>Truth tables grow exponentially, so large SAT benchmarks should be used to exercise parsing and conversion rather than to print every valuation. The tool rejects malformed formulas, incomplete prefix expressions, and DIMACS clauses without a terminating zero. Empty DIMACS clauses are reported because the assignment language has no false constant.</p>
+  <footer>Prepared for Assignment 1. Source-code API documentation is generated from Doxygen comments using <code>Doxyfile</code>.</footer>
+</main>
+</body>
+</html>
